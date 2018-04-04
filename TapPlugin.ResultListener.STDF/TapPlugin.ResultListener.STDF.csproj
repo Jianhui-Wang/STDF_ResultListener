@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C24DBC8F-5E5A-4C80-BFA6-A044AE0D767C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TapPlugin.ResultListener.STDF</RootNamespace>
+    <AssemblyName>TapPlugin.ResultListener.STDF</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>$(TAP_PATH)</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>$(TAP_PATH)</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Keysight.Tap.Engine, Version=6.0.47.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files\Keysight\TAP\Keysight.Tap.Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="Keysight.Tap.Plugins.ResultListener.Csv, Version=6.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files\Keysight\TAP\Keysight.Tap.Plugins.ResultListener.Csv.dll</HintPath>
+    </Reference>
+    <Reference Include="Keysight.Tap.ResultsViewer, Version=6.0.47.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files\Keysight\TAP\Keysight.Tap.ResultsViewer.exe</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="STDF.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="STDFHelper.cs" />
+    <Compile Include="Utility.cs" />
+    <Compile Include="WaferPlot.cs" />
+    <None Include="package.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LinqToStdf\LinqToStdf.csproj">
+      <Project>{e251dabb-78af-4451-93ef-b8c3420bebc5}</Project>
+      <Name>LinqToStdf</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <UsingTask TaskName="Keysihgt.Tap.Package.PackageTask" AssemblyFile="$(TAP_PATH)\Keysight.Tap.Package.exe" />
+  <UsingTask TaskName="Keysight.Tap.Package.SetAssemblyInfoTask" AssemblyFile="$(TAP_PATH)\Keysight.Tap.Package.exe" />
+  <Target Name="BeforeBuild">
+    <SetAssemblyInfoTask FilePath="Properties\AssemblyInfo.cs" AssemblyInformationalVersionFromGit="True" />
+  </Target>
+  <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release' ">
+    <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
+      <Output TaskParameter="Assemblies" ItemName="TargetInfo" />
+    </GetAssemblyIdentity>
+    <PackageTask Dir="$(TargetDir)" ConfFile="$(ProjectDir)\package.xml" />
+  </Target>
+</Project>

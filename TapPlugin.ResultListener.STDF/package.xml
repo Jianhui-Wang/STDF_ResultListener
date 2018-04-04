@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Package Name="STDF" xmlns="http://tap.aalborg.keysight.com/PackageSchema">
+  <Files>
+    <File Path="TapPlugin.ResultListener.STDF.dll" Obfuscate="true" UseVersion="true"></File>
+    <File Path="LinqToStdf.dll"></File>
+  </Files>
+</Package>
